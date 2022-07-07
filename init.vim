@@ -67,6 +67,14 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 " Barbar
 Plug 'romgrk/barbar.nvim'
+" Gruvbox
+Plug 'morhetz/gruvbox'
+" Git
+Plug 'tpope/vim-fugitive'
+" Copilot
+Plug 'github/copilot.vim'
+" Golang
+Plug 'fatih/vim-go'
 call plug#end()
 
 " General shortcuts
@@ -95,10 +103,11 @@ augroup END
 syntax on
 set t_Co=256
 set cursorline
-colorscheme onehalflight
-let g:airline_theme='onehalfdark'
+"colorscheme onehalflight
 " lightline
-let g:lightline = { 'colorscheme': 'onehalfdark' }
+autocmd vimenter * ++nested colorscheme gruvbox
+let g:airline_theme='gruvbox'
+let g:lightline = { 'colorscheme': 'gruvbox' }
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -137,7 +146,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " COC config "
 
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-tsserver', 'coc-css', 'coc-snippets', 'coc-eslint', 'coc-tabnine', 'coc-elixir', 'coc-prettier', 'coc-explorer', 'coc-html', 'coc-css']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-tsserver', 'coc-css', 'coc-snippets', 'coc-eslint', 'coc-elixir', 'coc-prettier', 'coc-explorer', 'coc-html', 'coc-css', 'coc-go']
 
 autocmd FileType css setl iskeyword+=-
 autocmd FileType scss setl iskeyword+=@-@
@@ -263,6 +272,11 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
+
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
